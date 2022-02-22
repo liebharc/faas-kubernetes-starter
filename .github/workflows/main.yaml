@@ -29,6 +29,8 @@ jobs:
         run: chmod a+x ./fission-cli-ubuntu-20.04-x86_64
       - name: Fission install
         run: sudo mv fission-cli-ubuntu-20.04-x86_64 /usr/local/bin/fission
+      - name: Finalize Fission install
+        run: export PATH=/usr/local/bin:$PATH
       - name: Check Kubectl
         run: kubectl version
       - name: Check Helm
