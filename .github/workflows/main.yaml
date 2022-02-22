@@ -33,7 +33,5 @@ jobs:
         run: kubectl version
       - name: Check Helm
         run: helm version
-      - name: Check Fission
-        run: fission version
       - name: Check Python
         run: python --version
