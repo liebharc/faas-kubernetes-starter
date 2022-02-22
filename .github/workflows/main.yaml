@@ -24,7 +24,7 @@ jobs:
       - name: Helm install
         run: ./get_helm.sh
       - name: Get Fission
-        run: curl -O https://github.com/fission-suite/fission/releases/download/2.17.0/fission-cli-ubuntu-20.04-x86_64
+        run: wget  https://github.com/fission-suite/fission/releases/download/2.17.0/fission-cli-ubuntu-20.04-x86_64
       - name: Prepare Fission install
         run: chmod a+x ./fission-cli-ubuntu-20.04-x86_64
       - name: Fission install
