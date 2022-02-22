@@ -26,6 +26,8 @@ jobs:
       - name: Get Fission
         run: curl -O https://github.com/fission-suite/fission/releases/download/2.17.0/fission-cli-ubuntu-20.04-x86_64
       - name: Prepare Fission install
-        run: chmod a+x ./fission-cli-ubuntu-2
+        run: chmod a+x ./fission-cli-ubuntu-20.04-x86_64
       - name: Fission install
-        run: export PATH=$PATH:$(pwd)
+        run: sudo mv fission-cli-ubuntu-20.04-x86_64 /usr/local/bin/fission
+      - name: Check Python
+        run: python --version
