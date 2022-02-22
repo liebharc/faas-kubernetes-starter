@@ -30,10 +30,10 @@ jobs:
       - name: Fission install
         run: sudo mv fission-cli-ubuntu-20.04-x86_64 /usr/local/bin/fission
       - name: Check Kubectl
-        run: kubectl --version
+        run: kubectl version
       - name: Check Helm
-        run: helm --version
+        run: helm version
       - name: Check Fission
-        run: fission --version
+        run: fission version
       - name: Check Python
         run: python --version
