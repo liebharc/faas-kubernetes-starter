@@ -17,11 +17,11 @@ jobs:
         uses: medyagh/setup-minikube@master
       - name: Try the cluster !
         run: kubectl get pods -A
-      - name: Get Helm3
+      - name: Get Helm
         run: curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-      - name: Prepare Helm3 install
+      - name: Prepare Helm install
         run: chmod 700 get_helm.sh
-      - name: Helm3 install
+      - name: Helm install
         run: ./get_helm.sh
       - name: Get Fission
         run: curl -O https://github.com/fission-suite/fission/releases/download/2.17.0/fission-cli-ubuntu-20.04-x86_64
@@ -29,5 +29,11 @@ jobs:
         run: chmod a+x ./fission-cli-ubuntu-20.04-x86_64
       - name: Fission install
         run: sudo mv fission-cli-ubuntu-20.04-x86_64 /usr/local/bin/fission
+      - name: Check Kubectl
+        run: kubectl --version
+      - name: Check Helm
+        run: helm --version
+      - name: Check Fission
+        run: fission --version
       - name: Check Python
         run: python --version
