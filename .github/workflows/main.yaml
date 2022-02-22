@@ -24,7 +24,7 @@ jobs:
       - name: Helm install
         run: ./get_helm.sh
       - name: Get Fission
-        run: curl -Lo fission https://github.com/fission/fission/releases/download/v1.15.1/fission-v1.15.1-darwin-amd64
+        run: curl -Lo fission https://github.com/fission/fission/releases/download/v1.15.1/fission-v1.15.1-linux-amd64
       - name: Prepare Fission install
         run: chmod +x fission
       - name: Fission install
