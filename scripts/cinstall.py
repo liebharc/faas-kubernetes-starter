@@ -202,7 +202,7 @@ class DatabaseProdBackupChart:
         encryption_key = builder.vars["db.backup.encryptionkey"]
         access_key = builder.vars["db.backup.s3.accesskey"]
         secret = builder.vars["db.backup.s3.secret"]
-        builder.helm_install(f"--create-namespace -n db dbbackup ./dbbackup --set encryptionKey='{encryption_key}' --set s3.accessKey='{access_key}' --set s3.secret='{secret}'")
+        builder.helm_install(f"--create-namespace -n db dbbackup ./dbbackup --set encryptionKey={encryption_key} --set s3.accessKey={access_key} --set s3.secret={secret}")
 class DatabaseDevChart:
     def applies_to_env(self, env):
         return env == "dev"
