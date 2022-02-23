@@ -36,4 +36,4 @@ jobs:
       - name: Install pip dependencies
         run: pip install -r requirements.txt
       - name: cinstall
-        run: python k8s/cinstall.py full --updateDependencies
+        run: python scripts/cinstall.py full --updateDependencies
