@@ -1,0 +1,21 @@
+# Restore backups with (run commands with bash): 
+# kubectl patch backupconfiguration -n db cockatoo-backup --type="merge" --patch='{"spec": {"paused": true}}'
+# kubectl get backupconfiguration -n db cockatoo-backup
+# kubectl apply -f backup_restore.yaml
+# kubectl get restoresession -n db
+# kubectl patch backupconfiguration -n db cockatoo-backup --type="merge" --patch='{"spec": {"paused": false}}'
+apiVersion: stash.appscode.com/v1beta1
+kind: RestoreSession
+metadata:
+  name: cockatoo-repo-restore
+  namespace: db
+spec:
+  repository:
+    name: cockatoo-backup-repo
+  target:
+    ref:
+      apiVersion: appcatalog.appscode.com/v1alpha1
+      kind: AppBinding
+      name: cockatoo
+  rules:
+  - snapshots: [latest]
