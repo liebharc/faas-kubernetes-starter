@@ -40,7 +40,7 @@ jobs:
       - name: Install pip dependencies
         run: pip install -r requirements.txt
       - name: cinstall
-        run: python scripts/cinstall.py full --updateDependencies
+        run: python scripts/cinstall.py full --updateDependencies --hardReinstall
       - name: Show cluster
         run: kubectl get service -A
       - name: Get minikube URLs
