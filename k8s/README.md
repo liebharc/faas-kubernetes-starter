@@ -1,7 +1,5 @@
 # leav-k8s backend
 
-Build status (main): [![CI](https://github.com/liebharc/faas-kubernetes-starter/workflows/CI/badge.svg?branch=main)](https://github.com/liebharc/faas-kubernetes-starter/actions)
-
 Leav Kubernetes backend.
 
 ## Requirements
