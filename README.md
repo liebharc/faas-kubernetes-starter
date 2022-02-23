@@ -23,7 +23,7 @@ These requirements are needed for both dev and prod installations:
 
 ## Steps
 
-For the production steps we use leaf.cloud as example. Why? Because they really on an open technology stack. This way you can find other cloud providers and the steps should be similar.
+For the production steps we use leaf.cloud as example. Why? Because they rely on an open technology stack. This way you can find other cloud providers and the steps should be similar.
 
 |                     | Dev                                                                             | Prod                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | ------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
