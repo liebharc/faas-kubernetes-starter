@@ -1,5 +1,7 @@
 # faas-kubernetes-starter
 
+Build status (main): [![CI](https://github.com/liebharc/faas-kubernetes-starter/workflows/CI/badge.svg?branch=main)](https://github.com/liebharc/faas-kubernetes-starter/actions)
+
 A starter project for FAAS (Functions As A Service or Serverless) on Kubernetes. This gives you something like AWS Lambda, Dynamo DB and Cognito which you can host on your Kubernetes cluster. The examples will use functions written in Typescript, but you should be able to use any of the [environments supported by Fission.io](https://environments.fission.io/)
 
 What you will get:
