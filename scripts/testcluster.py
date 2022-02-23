@@ -21,8 +21,8 @@ def capture_std_out_of_command(command, numberOfLines = -1):
     return capture
 
 def open_tunnel_and_get_url():
-    stdout = capture_std_out_of_command("minikube service ingress-nginx-controller --namespace ingress-nginx --url", numberOfLines=9)
-    print(stdout)
+    stdout = capture_std_out_of_command("minikube service ingress-nginx-controller --namespace ingress-nginx --url 2>&1")
+    print("Minikube url:\n" + stdout)
     is_host = re.compile("(http://(.*):(.*))")
     for line in stdout.splitlines():
         match = is_host.match(line)
@@ -34,4 +34,4 @@ def open_tunnel_and_get_url():
 url = open_tunnel_and_get_url()
 hello_url = url + "/v1/hello"
 print("Hello URL: " + hello_url)
-print(requests.get(hello_url).text)
+print(requests.get(hello_url).status_code)
