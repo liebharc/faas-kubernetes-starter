@@ -42,7 +42,7 @@ jobs:
       - name: cinstall
         run: python scripts/cinstall.py full --updateDependencies
       - name: Show cluster
-        run: minikube get service -A
+        run: kubectl get service -A
       - name: Get minikube URLs
         run: minikube service ingress-nginx-controller --namespace ingress-nginx --url
       - name: Test Cluster
