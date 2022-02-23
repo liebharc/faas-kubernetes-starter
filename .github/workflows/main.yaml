@@ -35,3 +35,5 @@ jobs:
         run: helm version
       - name: Check Python
         run: python --version
+      - name: Install
+        run: python k8s/cinstall.py full

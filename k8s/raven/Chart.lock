@@ -1,0 +1,6 @@
+dependencies:
+- name: fission-all
+  repository: https://fission.github.io/fission-charts/
+  version: v1.15.1
+digest: sha256:cee0f3a51264c6b32ef9ae2aafa89c444b5d6795fef52c1119c95a7db905ec42
+generated: "2022-02-05T12:48:09.487873838+01:00"

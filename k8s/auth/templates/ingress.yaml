@@ -1,0 +1,41 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: ingress-auth
+    annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-production
+        nginx.org/server-snippets: |
+          location / {
+            proxy_set_header X-Forwarded-For $host;
+            proxy_set_header X-Forwarded-Proto $scheme;
+          }
+{{- if .Values.host}}
+spec:
+    rules:
+      - host: {{ .Values.host }}
+        http:
+              paths:
+                  - path: /auth
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: auth-keycloak-http
+                            port:
+                                number: 80
+    tls:
+        - hosts:
+            - {{ .Values.host }}
+          secretName: letsencrypt-production
+{{- else}}
+spec:
+    rules:
+      - http:
+              paths:
+                  - path: /auth
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: auth-keycloak-http
+                            port:
+                                number: 80
+{{- end}}

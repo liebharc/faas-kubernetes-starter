@@ -1,0 +1,12 @@
+kind: ConfigMap 
+apiVersion: v1 
+metadata:
+  name: theme
+  labels:
+    name: theme
+    app: auth
+binaryData:
+  {{ range $path, $bytes := .Files.Glob (printf "leavtheme/**.*")}}
+  {{ $name := base $path }}
+  {{- printf "%s/%s" (dir $path) $name | replace "/" "-" | replace "\\" "-" | replace "." "-" | indent 2 }}{{ print ": "}}{{ $.Files.Get $path | b64enc}}
+  {{ end }}

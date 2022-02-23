@@ -1,0 +1,24 @@
+host: 
+
+# helm show values grafana/loki-stack
+loki:
+    grafana:
+        enabled: true
+        grafana.ini:
+            server:
+                root_url: /monitoring/
+    prometheus:
+        enabled: true
+    #        alertmanager:
+    #            persistentVolume:
+    #                enabled: false
+    #        server:
+    #            persistentVolume:
+    #                enabled: false
+    promtail:
+        enabled: true
+#    loki:
+#        persistence:
+#            enabled: true
+#            storageClassName: standard
+#            size: 5Gi

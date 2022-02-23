@@ -1,0 +1,57 @@
+db:
+  user:
+  password:
+  database: cockatoo
+
+host: 
+
+keycloak:
+    postgresql:
+        enabled: false
+
+    extraEnv: |
+        - name: KEYCLOAK_IMPORT
+          value: /realm/realm.json
+        - name: PROXY_ADDRESS_FORWARDING
+          value: "true"
+        
+    extraEnvFrom: |
+        - secretRef:
+            name: 'authsecrets'
+    
+    extraVolumes: |
+        - name: realm-volume
+          configMap:
+            name: realm
+        - name: theme-volume
+          configMap:
+            name: theme
+
+    extraVolumeMounts: |
+        - name: realm-volume
+          mountPath: "/realm/"
+          readOnly: true 
+        - name: theme-volume
+          mountPath: "/opt/jboss/keycloak/themes/leavtheme/login/theme.properties"
+          subPath: "leavtheme-login-theme-properties"
+          readOnly: false 
+        - name: theme-volume
+          mountPath: "/opt/jboss/keycloak/themes/leavtheme/login/terms.ftl"
+          subPath: "leavtheme-login-terms-ftl"
+          readOnly: false 
+        - name: theme-volume
+          mountPath: "/opt/jboss/keycloak/themes/leavtheme/login/register.ftl"
+          subPath: "leavtheme-login-register-ftl"
+          readOnly: false 
+        - name: theme-volume
+          mountPath: "/opt/jboss/keycloak/themes/leavtheme/login/resources/css/styles.css"
+          subPath: "leavtheme-login-resources-css-styles-css"
+          readOnly: false 
+        - name: theme-volume
+          mountPath: "/opt/jboss/keycloak/themes/leavtheme/login/messages/messages_de.properties"
+          subPath: "leavtheme-login-messages-messages_de-properties"
+          readOnly: false 
+        - name: theme-volume
+          mountPath: "/opt/jboss/keycloak/themes/leavtheme/login/messages/messages_en.properties"
+          subPath: "leavtheme-login-messages-messages_en-properties"
+          readOnly: false 

@@ -1,0 +1,27 @@
+# DB migration
+db:
+    host: database-postgres-pgpool.db.svc.cluster.local
+    name: cockatoo
+    post: 5432
+    url: 'jdbc:postgresql://database-postgres-pgpool:5432/cockatoo'
+    username: 'postgres'
+    password: 'hyf7fSHIIn6IiwYz2a0r' # This helm chart is only used for development. Everything which goes to production needs strict password rules.
+
+# https://docs.bitnami.com/kubernetes/infrastructure/apache-a
+# https://hub.kubeapps.com/charts/bitnami/postgresql-ha/8.2.6
+postgres:
+    postgresql:
+        database: cockatoo
+        password: 'hyf7fSHIIn6IiwYz2a0r' # These are only the development passwords
+        repmgrPassword: 'JG3ZBoWMADvJh1PqqUUz'
+    pgpool:
+        adminPassword: 'B5EEwO0zxzSdoIwkyfyt'
+        initdbScripts:
+            create_pool_users.sh: |
+                #!/bin/bash
+                 USERS=("keycloak:Fj1zXkCHYENfrco13nmY" "raven:hzZufWZtTJ9vS046AFot")
+
+                 for user in "${USERS[@]}"; do
+                     user_info=(${user//:/ })
+                     pg_md5 -m --config-file="/opt/bitnami/pgpool/conf/pgpool.conf" -u "${user_info[0]}" "${user_info[1]}"
+                 done

@@ -1,0 +1,15 @@
+# DB migration
+db:
+    name: cockatoo
+    port: "5432"
+    host: 
+    url: 
+    user: 
+    password: 
+auth:
+    url:
+
+# helm show values fission-charts/fission-all
+fission:
+    analytics: false
+    functionNamespace: 'fission'

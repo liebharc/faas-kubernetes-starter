@@ -1,0 +1,22 @@
+.login-pf body {
+    background: #9362e7 !important;
+}
+
+.login-pf-page-header {
+    font-size: xx-large;
+    font-weight: 600;
+    color: white;
+}
+
+.card-pf {
+    width: 100%;
+    max-width: 600px;
+}
+
+.login-pf-page {
+    background: #9362e7;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

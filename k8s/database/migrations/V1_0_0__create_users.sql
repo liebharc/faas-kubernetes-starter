@@ -1,0 +1,7 @@
+CREATE USER keycloak WITH PASSWORD 'Fj1zXkCHYENfrco13nmY';
+CREATE SCHEMA AUTHORIZATION keycloak;
+ALTER ROLE keycloak SET search_path TO keycloak;
+
+CREATE USER raven WITH PASSWORD 'hzZufWZtTJ9vS046AFot';
+CREATE SCHEMA AUTHORIZATION raven;
+ALTER ROLE raven SET search_path TO raven;

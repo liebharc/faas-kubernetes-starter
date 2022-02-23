@@ -1,0 +1,10 @@
+{
+    "apidomain": "",
+    "authdomain": "",
+    "dbhost": "database-postgres-pgpool.db.svc.cluster.local",
+    "authpassword": "Fj1zXkCHYENfrco13nmY",
+    "ravenpassword": "hzZufWZtTJ9vS046AFot",
+    "db.backup.encryptionkey": "",
+    "db.backup.s3.accesskey": "",
+    "db.backup.s3.secret": ""
+}

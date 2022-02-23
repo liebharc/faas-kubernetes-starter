@@ -1,0 +1,7 @@
+Welcome to Cockatoo! 🤗🤩❤
+
+Raven 𓄿 is where our intelligence resides.
+
+Get the application URL, you need to access the application with the URL local.leav.app (see the README for details)
+
+minikube service ingress-nginx-controller --namespace ingress-nginx --url

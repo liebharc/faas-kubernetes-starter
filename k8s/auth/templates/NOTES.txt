@@ -1,0 +1,9 @@
+Welcome to Cockatoo Auth! 🐶🐕
+
+Open the port: 
+
+    kubectl port-forward service/auth-keycloak 8080:80
+    kubectl port-forward auth-keycloak-0 9990:9990
+
+Passwords:
+    kubectl get secret --namespace "auth" authsecrets -o jsonpath="{.data.KEYCLOAK_PASSWORD}" | base64 --decode; echo

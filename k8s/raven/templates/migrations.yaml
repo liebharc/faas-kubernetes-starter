@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{.Release.Name}}-database-migrations"
+  labels:
+    app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+    app.kubernetes.io/instance: {{.Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+  annotations:
+    "helm.sh/hook": post-install, post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation, hook-succeeded
+spec:
+  backoffLimit: 5
+  template:
+    metadata:
+      name: "{{.Release.Name}}-migrations"
+      labels:
+        app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+        app.kubernetes.io/instance: {{.Release.Name | quote }}
+        helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: flyway-migrate
+        image: flyway/flyway
+        args: ['migrate']
+        env:
+        - name: FLYWAY_LOCATIONS
+          value: 'filesystem:/flyway/migrations'
+        - name: FLYWAY_URL
+          value: {{ .Values.db.url }}
+        - name: FLYWAY_USER
+          value: {{ .Values.db.user }}
+        - name: FLYWAY_PASSWORD
+          value: {{ .Values.db.password }}
+        - name: driver-class-name
+          value: org.postgresql.Driver
+        volumeMounts:
+        - mountPath: /flyway/migrations
+          name: flyway-volume
+      volumes:
+        - name: flyway-volume
+          configMap:
+             name: flyway-migration-scripts

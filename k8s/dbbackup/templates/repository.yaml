@@ -1,0 +1,12 @@
+apiVersion: stash.appscode.com/v1alpha1
+kind: Repository
+metadata:
+  name: cockatoo-backup-repo
+  namespace: {{ .Release.Namespace }}
+spec:
+  backend:
+    s3:
+      endpoint: leafcloud.store
+      bucket: cockatoobackup
+      prefix: backups/db/cockatoo
+    storageSecretName: bucket-secrets

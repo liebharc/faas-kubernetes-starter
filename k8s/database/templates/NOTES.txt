@@ -1,0 +1,5 @@
+Your Cockatoo developer database is ready! 👨‍🏭👩‍🏭
+
+Open the port: 
+
+    kubectl port-forward service/database-postgres-pgpool 5432:5432 -n db

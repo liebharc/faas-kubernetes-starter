@@ -1,0 +1,6 @@
+Welcome to Cockatoo Monitoring has been installed! Keep going to get a full stack. 🏃‍♀️🏇🦜
+
+Monitoring adds:
+
+- /monitoring endpoint, get password with:
+    kubectl get secret --namespace monitoring monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
