@@ -240,8 +240,8 @@ class AuthChart:
     def delete(self, builder):
         builder.helm_delete("-n auth auth")
     def install(self, builder):
-        db_host = builder.var["db_host"]
-        db_pw = builder.var["authpassword"]
+        db_host = builder.vars["dbhost"]
+        db_pw = builder.vars["authpassword"]
         host = ""
         if builder.env == "prod":
             host = "--set host=" + builder.vars["authdomain"]
@@ -257,8 +257,8 @@ class RavenChart:
     def delete(self, builder):
         builder.helm_delete("raven")
     def install(self, builder):
-        db_host = builder.var["db_host"]
-        db_pw = builder.var["ravenpassword"]
+        db_host = builder.vars["dbhost"]
+        db_pw = builder.vars["ravenpassword"]
         db_name = "postgres" if builder.env == "prod" else "cockatoo"
         builder.helm_install(f"raven ./raven --set db.host={db_host} --set db.user=raven --set db.password={db_pw} --set db.url=jdbc:postgresql://{db_host}:5432/{db_name} --set auth.url=http://auth-keycloak-http.auth.svc.cluster.local")
 
@@ -367,18 +367,18 @@ def update_helm_dependencies():
     chart_install_order = get_charts_install_order()
     for chart in chart_install_order:
         if chart.is_local_chart():
-            os.chdir(os.path.join(helm_chart_location, chart.name()))
+            os.chdir(chart.name())
             system("helm dependency update")
             os.chdir("..")
 
 def load_env_file(env, useEnvVars):
-    if args.env == "prod" == True and useEnvVars == True:
+    if env == "prod" == True and useEnvVars == True:
         template = load_env_file("dev", False)
         for key in template.keys():
             template[key] = os.environ["cinstall." + key]
         return template
         
-    with open(os.path.join(scriptlocation, env + "-env.json")) as f:
+    with open(env + "-env.json") as f:
         lines = f.readlines()
         return json.loads(str.join("\n", lines))
 
@@ -476,6 +476,7 @@ if __name__=="__main__":
     args = parse_args()
     cwd = os.getcwd()
     try:
+        os.chdir(helm_chart_location)
         main(args)
     finally:
         os.chdir(cwd)
