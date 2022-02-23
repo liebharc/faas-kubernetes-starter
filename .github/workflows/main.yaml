@@ -14,9 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Check npm
-        uses: npm --version
+        run: npm --version
       - name: npm install
-        uses: cd k8s && npm install && npm run build
+        run: cd k8s && npm install && npm run build
       - name: Start minikube
         uses: medyagh/setup-minikube@master
       - name: Get Helm
