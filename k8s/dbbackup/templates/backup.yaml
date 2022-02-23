@@ -2,11 +2,11 @@ apiVersion: stash.appscode.com/v1beta1
 kind: BackupConfiguration
 metadata:
   name: cockatoo-backup
-  namespace: {{ .Release.Namespace }}
+  namespace: { { .Release.Namespace } }
 spec:
-  schedule: "*/5 * * * *"
+  schedule: '*/5 * * * *'
   task:
-    name: postgres-backup-11.9
+    name: postgres-backup-14.0
   repository:
     name: cockatoo-backup-repo
   target:
