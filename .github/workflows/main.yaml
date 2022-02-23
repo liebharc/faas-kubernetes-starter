@@ -35,5 +35,7 @@ jobs:
         run: helm version
       - name: Check Python
         run: python --version
+      - name: Install pip dependencies
+        run: pip install -r requirements.txt
       - name: Install
         run: python k8s/cinstall.py full
