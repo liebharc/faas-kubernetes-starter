@@ -41,3 +41,5 @@ jobs:
         run: pip install -r requirements.txt
       - name: cinstall
         run: python scripts/cinstall.py full --updateDependencies
+      - name: Test Cluster
+        run: python scripts/testcluster.py
