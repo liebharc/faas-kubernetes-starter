@@ -41,5 +41,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: cinstall
         run: python scripts/cinstall.py full --updateDependencies
+      - name: Get minikube URLs
+        run: minikube service ingress-nginx-controller --namespace ingress-nginx --url
       - name: Test Cluster
         run: python scripts/testcluster.py
