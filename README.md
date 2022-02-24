@@ -82,6 +82,10 @@ This project is based on a couple of helm charts. If you need to update an exist
 
 Add files to `k8s/services`, take also a look at the existing file as example and check the FAQ entry for function naming. Run `cinstall.py functions` to install the functions.
 
+### How to add tables?
+
+Add files to `k8s/raven/migrations`, take also a look at the existing file as example and take some time to understand how [flyway](https://flywaydb.org/) migrations work.
+
 ### Why does this look like it was originally part of a larger project?
 
 This template has been created out of `leav.app`, which consists of multiple parts. The Kubernetes backend is only a part of it, but it's a part we wanted to share.
