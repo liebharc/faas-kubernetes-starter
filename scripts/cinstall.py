@@ -260,9 +260,8 @@ class RavenChart:
     def install(self, builder):
         db_host = builder.vars["dbhost"]
         db_pw = builder.vars["ravenpassword"]
-        api_key = builder.vars["apikey"]
         db_name = "postgres" if builder.env == "prod" else "cockatoo"
-        builder.helm_install(f"raven ./raven --set db.host={db_host} --set db.name={db_name} --set db.user=raven --set db.password={db_pw} --set db.url=jdbc:postgresql://{db_host}:5432/{db_name} --set auth.url=http://auth-keycloak-http.auth.svc.cluster.local --set api_key={api_key}")
+        builder.helm_install(f"raven ./raven --set db.host={db_host} --set db.name={db_name} --set db.user=raven --set db.password={db_pw} --set db.url=jdbc:postgresql://{db_host}:5432/{db_name} --set auth.url=http://auth-keycloak-http.auth.svc.cluster.local")
 
 class FissionFunctions:
     def applies_to_env(self, _):
