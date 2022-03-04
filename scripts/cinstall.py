@@ -72,7 +72,9 @@ def parse_args():
     parser.add_argument('--reinstall', dest ='reinstall',
                         action ='store_true', help ='Reinstalls the helm chart')
     parser.add_argument('--functionRecreate', dest ='functionRecreate',
-                        action ='store_true', help ='Recreates existing Fission function and trigger resources')
+                        action ='store_true', help ='Recreates existing Fission function resources')
+    parser.add_argument('--triggerRecreate', dest ='triggerRecreate',
+                        action ='store_true', help ='Recreates existing Fission trigger resources')
     parser.add_argument('--delete', dest ='delete',
                         action ='store_true', help ='Deletes the helm chart')                    
     parser.add_argument('--hardReinstall', dest ='hardReinstall',
@@ -153,14 +155,16 @@ class CertChart:
     def applies_to_env(self, env):
         return env == "prod"
     def is_local_chart(self):
-        return True
+        return False
     def name(self):
         return "cert"
     def delete(self, builder):
         builder.helm_delete("-n cert-manager cert")
     def install(self, builder):
-        builder.helm_install("--create-namespace -n cert-manager cert ./cert")
-        cert = os.path.join(helm_chart_location, "operators", "letsencrypt-staging.yaml")
+        builder.helm_repo("add jetstack https://charts.jetstack.io")
+        builder.helm_repo("update")
+        builder.helm_install("--create-namespace -n cert-manager cert jetstack/cert-manager --set installCRDs=true --version v1.7.1")
+        cert = os.path.join(helm_chart_location, "operators", "letsencrypt-production.yaml")
         builder.kubectl("apply -f " + cert)
 
 class DatabaseProdChart:
@@ -174,20 +178,16 @@ class DatabaseProdChart:
         builder.helm_delete("-n db database")
     def install(self, builder):
         def check_license_exists():
-            if (not exists("kubedb-license.txt")):
+            if (not exists("license.txt")):
                 eprint("Kube DB license file not found. Please create a Kube DB license.txt file in the current directory. Refer also to: https://kubedb.com/docs/v2021.09.30/setup/install/enterprise/")
-                return False
-            if (not exists("stash-license.txt")):
-                eprint("Stash license file not found. Please create a Kube DB license.txt file in the current directory. Refer also to: https://kubedb.com/docs/v2021.09.30/setup/install/enterprise/")
                 return False
             return True
 
         builder.check(check_license_exists)
-        builder.helm_install("kubedb appscode/kubedb --version v2021.12.21 --namespace kubedb --create-namespace --set kubedb-enterprise.enabled=true --set kubedb-autoscaler.enabled=true --set-file global.license=kubedb-license.txt")
-        builder.helm_install("stash appscode/stash --version v2022.02.22 --namespace kubedb --create-namespace --set features.enterprise=true --set-file global.license=stash-license.txt")
-        builder.kubectl("kubectl create ns db")
-        builder.kubectl("kubectl create -f " + os.path.join("operators", "kubedb", "pgadmin.yaml"))
-        builder.kubectl("kubectl create -f " + os.path.join("operators", "kubedb", "postgres.yaml"))
+        builder.helm_install("kubedb appscode/kubedb --version v2021.12.21 --namespace kubedb --create-namespace --set kubedb-enterprise.enabled=true --set kubedb-autoscaler.enabled=true --set-file global.license=license.txt")
+        builder.helm_install("stash appscode/stash --version v2022.02.22 --namespace kubedb --create-namespace --set features.enterprise=true --set-file global.license=license.txt")
+        builder.kubectl("create ns db")
+        builder.kubectl("create -f " + os.path.join("operators", "kubedb", "postgres.yaml"))
 
 class DatabaseProdBackupChart:     
     def applies_to_env(self, env):
@@ -242,10 +242,11 @@ class AuthChart:
     def install(self, builder):
         db_host = builder.vars["dbhost"]
         db_pw = builder.vars["authpassword"]
+        database = builder.vars["dbname"]
         host = ""
         if builder.env == "prod":
             host = "--set host=" + builder.vars["authdomain"]
-        builder.helm_install(f"--create-namespace -n auth auth ./auth --set db.host={db_host} --set db.user=keycloak --set db.password={db_pw} " + host)
+        builder.helm_install(f"--create-namespace -n auth auth ./auth --set db.host={db_host} --set db.user=keycloak --set db.password={db_pw} --set db.database={database} " + host)
 
 class RavenChart:
     def applies_to_env(self, _):
@@ -259,8 +260,9 @@ class RavenChart:
     def install(self, builder):
         db_host = builder.vars["dbhost"]
         db_pw = builder.vars["ravenpassword"]
+        api_key = builder.vars["apikey"]
         db_name = "postgres" if builder.env == "prod" else "cockatoo"
-        builder.helm_install(f"raven ./raven --set db.host={db_host} --set db.user=raven --set db.password={db_pw} --set db.url=jdbc:postgresql://{db_host}:5432/{db_name} --set auth.url=http://auth-keycloak-http.auth.svc.cluster.local")
+        builder.helm_install(f"raven ./raven --set db.host={db_host} --set db.name={db_name} --set db.user=raven --set db.password={db_pw} --set db.url=jdbc:postgresql://{db_host}:5432/{db_name} --set auth.url=http://auth-keycloak-http.auth.svc.cluster.local --set api_key={api_key}")
 
 class FissionFunctions:
     def applies_to_env(self, _):
@@ -307,7 +309,7 @@ class FissionFunctions:
                 existing_functions.remove(function_name)
 
             is_existing_trigger = function_name in existing_triggers
-            if not is_existing_trigger or args.functionRecreate:
+            if not is_existing_trigger or args.triggerRecreate:
                 host = builder.vars["apidomain"]
                 domain = f"--ingressrule \"{host}={route}\" --ingressannotation \"cert-manager.io/cluster-issuer=letsencrypt-production\" --ingressannotation \"kubernetes.io/ingress.class=nginx\" --ingresstls letsencrypt-production " if builder.env == "prod" else ""
                 route_action = "update" if is_existing_trigger else "create"
@@ -345,8 +347,6 @@ def get_charts(env, chartnames):
             if chart.name() in chartnames:
                 if chart.applies_to_env(env):
                     charts.append(chart)
-                else:
-                    eprint("{} does not apply to {}".format(chart.name(), env))
         return charts
 
 def check(builder):

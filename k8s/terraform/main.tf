@@ -1,4 +1,9 @@
-
+terraform {
+  backend "kubernetes" {
+    secret_suffix = "state"
+    config_path = "~/config"
+  }
+}
 
 data "openstack_networking_subnet_v2" "public_subnet" {
   name = "external"
