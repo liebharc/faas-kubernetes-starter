@@ -6,7 +6,7 @@ metadata:
 spec:
   backend:
     s3:
-      endpoint: leafcloud.store
+      endpoint: https://leafcloud.store
       bucket: cockatoobackup
       prefix: backups/db/cockatoo
     storageSecretName: bucket-secrets
